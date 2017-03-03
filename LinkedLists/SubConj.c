@@ -1,43 +1,33 @@
+
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <stdbool.h>
 struct node
 {
   int item;
   struct node *next;
 };typedef struct node node;
 
+node* create_linked_list()
 
-node* create(int value)
 {
-    node* p = (node*) malloc(sizeof(node));
-    p->item = value;
-    return p;
+
+return NULL;
+
 }
 
-node* add_last(node* head, int value)
+node* add(node *head, int item)
+
 {
-    node* new_node = create(value);
-    node* previous = NULL;
-    node* aux = head;
-    
-    while(aux != NULL)
-    {
-        previous = aux;
-        aux = aux->next;
-    }
-    if(previous == NULL)
-    {
-        new_node->next = head;
-        head = new_node;
-    }
-    else
-    {
-        new_node->next = previous->next;
-        previous->next = new_node;
-    }
-    return head;
-    
+
+node *new_node = (node*) malloc(sizeof(node));
+
+new_node->item = item;
+
+new_node->next = head;
+
+return new_node;
+
 }
  
 void printList(struct node *node)
@@ -52,48 +42,53 @@ void printList(struct node *node)
  
 bool subConj(node* first, node* second)
 {
-    bool result_func;
-    node* aux1 = first;
+    bool result_func = false;
     node* aux2 = second;
-    while(aux2 != null)
+    while(aux2 != NULL)
     {
-      while(aux1 != null)
+	node* aux1 = first;
+      while(aux1 != NULL)
       {
         if(aux1->item != aux2->item) 
         {
           aux1 = aux1->next;
-          result_func = false;
         }
-        else
+        else if(aux1->item == aux2->item)
         {
           result_func = true;
           break;
         }
+	if(aux1 == NULL)
+	{
+	  result_func = false;
+	  break;	
+	}
       }
       aux2 = aux2->next;
+      if(result_func == false) break;
     }
     return result_func;
 }
-int main()
+void main()
 {
     bool result;
-    node* listA;
-    node* listB;
+    node* listA = create_linked_list();
+    node* listB = create_linked_list();
     int A, B, value;
     scanf("%d", &A);
     while(A > 0)
     {
-    scanf("%d", &value);
-    listA = add_last(listA, value);
-    A--;
+    	scanf("%d", &value);
+    	listA = add(listA, value);
+    	A--;
     }
     scanf("%d", &B);
     while(B > 0)
     {
-    scanf("%d", &value);
-    listB= add_last(listB, value);
-    B--;
+    	scanf("%d", &value);
+    	listB= add(listB, value);
+    	B--;
     }
     result = subConj(listA, listB);
-   return result;
+    printf("%d", result);
 }
