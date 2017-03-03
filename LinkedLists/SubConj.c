@@ -50,17 +50,33 @@ void printList(struct node *node)
 }
  
  
-int subConj(node* A, node* B)
+bool subConj(node* first, node* second)
 {
-    node* aux = B;
-    while(aux != null)
+    bool result_func;
+    node* aux1 = first;
+    node* aux2 = second;
+    while(aux2 != null)
     {
-      if(aux->item != 
+      while(aux1 != null)
+      {
+        if(aux1->item != aux2->item) 
+        {
+          aux1 = aux1->next;
+          result_func = false;
+        }
+        else
+        {
+          result_func = true;
+          break;
+        }
+      }
+      aux2 = aux2->next;
     }
-    
+    return result_func;
 }
 int main()
 {
+    bool result;
     node* listA;
     node* listB;
     int A, B, value;
@@ -75,9 +91,9 @@ int main()
     while(B > 0)
     {
     scanf("%d", &value);
-    listA = add_last(listA, value);
+    listB= add_last(listB, value);
     B--;
     }
-    printList(revert(lista));
-   return 0;
+    result = subConj(listA, listB);
+   return result;
 }
