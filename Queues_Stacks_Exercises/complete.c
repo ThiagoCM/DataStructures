@@ -82,15 +82,15 @@ int main() {
   	print(deque);
     dequeue_front(deque);
     print(deque);
-    dequeue_rear (deque);
+    dequeue_rear(deque);
     print(deque);
-    
+ 
   	erase(deque);
   	for(i = 0; i < 3; ++i)
   		enqueue_rear(deque, i);
   		
   	print(deque);
-    destruct(deque);
+    //destruct(deque);
        
 	return 0;
 }
@@ -123,25 +123,25 @@ int size(deque_t *deque)
 	return deque->size;
 }
 
-bool empty (deque_t *deque)
+bool empty(deque_t *deque)
 {
-	if(deque->size == 0)	return true;
+	if(deque->size == 0 || deque->rear == NULL || deque->front == NULL)	return true;
 	else	return false;
 }
 
-int front (deque_t *deque)
+int front(deque_t *deque)
 {
 	if(deque->size == 0) return empty(deque);
 	else return deque->front->value;
 }
 
-int      rear         (deque_t *deque)
+int      rear(deque_t *deque)
 {
 	if(deque->size == 0) return empty(deque);
 	else return deque->rear->value;
 }
 
-void     enqueue_rear (deque_t *deque, int value)
+void     enqueue_rear(deque_t *deque, int value)
 {
 	node_t* new = node_new(value);
 	if(empty(deque))
@@ -177,39 +177,43 @@ void     enqueue_front(deque_t *deque, int value)
 	}
 }
 
-void     dequeue_rear (deque_t *deque)
+void     dequeue_rear(deque_t *deque)
 {
-	deque_t* aux = deque;
+	node_t* aux = deque->rear;
 	if(empty(deque)) return;
 	else{
-		deque->rear = aux->rear->prev;
+		deque->rear = aux->prev;
+		free(aux);
+		deque->rear->next = NULL;
 	}
 }
 
-void     dequeue_front (deque_t *deque)
+void     dequeue_front(deque_t *deque)
 {
-	deque_t* aux = deque;
+	node_t* aux = deque->front;
 	if(empty(deque)) return;
 	else{
-		deque->front = aux->front->next;
+		deque->front = aux->next;
+		free(aux);
 	}
 }
 
-void     erase        (deque_t *deque)
+void     erase(deque_t *deque)
 {
-	free(deque);
+	deque->front = NULL;
+	deque->rear = NULL;
 }
 
-void     print        (deque_t *deque)
+void     print(deque_t *deque)
 {
-	deque_t* aux = deque;
-	if(empty(deque))	return;
+	node_t* aux = deque->front;
+	if(empty(deque)) return;
 	else
 	{
-		while(aux->front != NULL)
+		while(aux != NULL)
 		{
-		printf("%d ", aux->front->value);
-		aux->front = deque->front->next;
+		printf("%d ", aux->value);
+		aux = aux->next;
 		}
 		printf("\n");
 	}
